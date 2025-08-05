@@ -48,6 +48,8 @@ DISABLE_WARNING_POP
 
 #define QV_CUDA_NUM_THREADS 1024
 #define QV_MAX_REGISTERS 10
+
+#include "simulators/statevector/chunk/batched_matrix_kernels.hpp"
 #define QV_MAX_BLOCKED_GATES 64
 
 #define QV_PROBABILITY_BUFFER_SIZE 4
@@ -278,6 +280,12 @@ public:
                                     const cvector_t<double> &mat,
                                     const uint_t num_shots_per_matrix,
                                     const uint_t gid, const uint_t count);
+  
+  // Optimized batch processing for multiple 2x2 matrix operations
+  virtual void apply_batched_2x2_matrices(const std::vector<uint_t> &chunks,
+                                          const std::vector<reg_t> &qubits_list,
+                                          const std::vector<cvector_t<double>> &matrices,
+                                          const uint_t gid, const uint_t count);
 
   // apply diagonal matrix
   virtual void apply_diagonal_matrix(const uint_t iChunk, const reg_t &qubits,
